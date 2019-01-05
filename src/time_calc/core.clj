@@ -1,4 +1,5 @@
-(ns time-calc.core)
+(ns time-calc.core 
+  (:gen-class))
 
 (defn foo
   "I don't do a whole lot."
