@@ -1,4 +1,4 @@
-(defproject bar "0.1.0-SNAPSHOT"
+(defproject time-calc-clj-clr "0.1.0-SNAPSHOT"
   :description "Application to summarize daily activities."
   :url "https://github.com/mrwizard82d1/time-calc-clj-clr"
   :license {:name "Eclipse Public License"
