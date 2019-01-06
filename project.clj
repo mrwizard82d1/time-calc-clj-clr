@@ -3,7 +3,7 @@
   :url "https://github.com/mrwizard82d1/time-calc-clj-clr"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v20.html"}
-  :dependencies []
+  :dependencies [[org.clojure/clojure "1.8.0"]]
   :warn-on-reflection true
   :min-lein-version "2.0.0"
   :plugins [[lein-clr "0.2.1"]]
