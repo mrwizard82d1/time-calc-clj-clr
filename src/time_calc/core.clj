@@ -18,7 +18,9 @@
                        "Jan" 1 "Feb" 2 "Mar" 3 "Apr" 4 "May" 5 "Jun" 6
                        "Jul" 7 "Aug" 8 "Sep" 9 "Oct" 10 "Nov" 11 "Dec" 12
                        nil)]
-        [month (int (second matches))]))))
+        (let [candidate-day (int (second matches))]
+          (if (<= candidate-day 31)
+            [month (int (second matches))]))))))
 
 (defn time-of-day
   "Extract the time of day from `word`."

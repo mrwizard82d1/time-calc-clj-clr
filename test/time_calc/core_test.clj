@@ -26,6 +26,7 @@
     (is (= [:word "41-Mar"]  (time-calc.core/token "41-Mar")))
     (is (= [:word "21-Mat"]  (time-calc.core/token "21-Mat")))
     (is (= [:word "2a-Mar"]  (time-calc.core/token "2a-Mar")))
+    (is (= [:word "32-Mar"]  (time-calc.core/token "32-Mar")))
     (is (= [:word "3453"]  (time-calc.core/token "3453")))
     (is (= [:word "1a53"]  (time-calc.core/token "1a53")))
     (is (= [:word "1463"]  (time-calc.core/token "1463")))
