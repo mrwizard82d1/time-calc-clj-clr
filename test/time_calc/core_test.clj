@@ -19,9 +19,16 @@
 (deftest tokens
   (testing "Verify the behavior of the token function."
     (is (= [:start-day "#"] (time-calc.core/token "#")))
-    (is (= [:day-of-month "21-Mar"]  (time-calc.core/token "21-Mar")))
-    (is (= [:hour "1453"]  (time-calc.core/token "1453")))
-    (is (= [:word "evanui"]  (time-calc.core/token "evanui")))))
+    (is (= [:day-of-month [3 21]]  (time-calc.core/token "21-Mar")))
+    (is (= [:time [14 53]  (time-calc.core/token "1453")]))
+    (is (= [:word "evanui"]  (time-calc.core/token "evanui")))
+    (is (= [:word "41-Mar"]  (time-calc.core/token "41-Mar")))
+    (is (= [:word "21-Mat"]  (time-calc.core/token "21-Mat")))
+    (is (= [:word "2a-Mar"]  (time-calc.core/token "2a-Mar")))
+    (is (= [:word "3453"]  (time-calc.core/token "3453")))
+    (is (= [:word "1a53"]  (time-calc.core/token "1a53")))
+    (is (= [:word "1463"]  (time-calc.core/token "1463")))
+    (is (= [:word "145a"]  (time-calc.core/token "145a")))))
 
 
 
