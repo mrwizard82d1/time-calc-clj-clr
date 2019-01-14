@@ -26,7 +26,9 @@
   "Extract the time of day from `word`."
   [word]
   (if-let [matches (re-matches #"([0-2][0-9])([0-5][0-9])" word)]
-    [(second matches) (nth matches 2)]))
+    (let [candidate-hour (second matches)]
+      (if (< candidate-hour 24)
+        [candidate-hour (nth matches 2)]))))
 
 (defn token
   "Tokenize a sequences of 'words.'"
