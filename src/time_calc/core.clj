@@ -12,7 +12,7 @@
 (defn day-of-month
   "Extract the components of the day of the month from `word`."
   [word]
-  (if-let [matches (re-matches #"([012]\d)-([A-Za-z]{3})" word)]
+  (if-let [matches (re-matches #"([0123]\d)-([A-Za-z]{3})" word)]
     (let [candidate-month (clojure.string/capitalize (nth matches 2))]
       (if-let [month (case candidate-month
                        "Jan" 1 "Feb" 2 "Mar" 3 "Apr" 4 "May" 5 "Jun" 6

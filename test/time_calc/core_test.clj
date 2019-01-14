@@ -20,6 +20,7 @@
   (testing "Verify the behavior of the token function."
     (is (= [:start-day "#"] (time-calc.core/token "#")))
     (is (= [:day-of-month [3 21]]  (time-calc.core/token "21-Mar")))
+    (is (= [:day-of-month [12 31]]  (time-calc.core/token "31-Dec")))
     (is (= [:time [14 53]  (time-calc.core/token "1453")]))
     (is (= [:word "evanui"]  (time-calc.core/token "evanui")))
     (is (= [:word "41-Mar"]  (time-calc.core/token "41-Mar")))
