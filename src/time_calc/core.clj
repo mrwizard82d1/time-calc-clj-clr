@@ -50,18 +50,7 @@
       (if (< candidate-hour 24)
         [candidate-hour (nth matches 2)]))))
 
-(defn token
-  "Tokenize a sequences of 'words.'"
-  [word]
-  (cond
-    (= word "#") [:start-day word]
-    (day-of-year word) [:day-of-year (day-of-year word)]
-    (time-of-day word) [:time (time-of-day word)]
-    :else [:word word]))
-
 (defn -main
   [& args]
   (apply println "Received args:" args)
-  (println (->> (slurp (first args) :encoding "ISO-8859-1")
-                words
-                (map token))))
+  (println (->> (slurp (first args) :encoding "ISO-8859-1"))))
