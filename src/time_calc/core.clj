@@ -50,7 +50,33 @@
       (if (< candidate-hour 24)
         [candidate-hour (nth matches 2)]))))
 
+(defn content-filled-lines [s]
+  "Transform a string into a sequence of content filled lines.
+
+  A content filled line is a line that is neither blank nor whitespace only.
+  Additionally, each line has extraneous whitespace trimmed from the ends."
+  (->> s
+       clojure.string/split-lines
+       (map clojure.string/trim)
+       (filter (complement clojure.string/blank?))))
+
+(defn ->days [lines]
+  "Convert a sequence of lines into a sequence of days"
+  lines)
+
+(defn summarize-day [day]
+  "Summarize the time spent on activities for a single day."
+  day)
+
+(defn print-summary [summary]
+  "Print a single day activity summary."
+  (println summary))
+
 (defn -main
   [& args]
   (apply println "Received args:" args)
-  (println (->> (slurp (first args) :encoding "ISO-8859-1"))))
+  (println (->> (slurp (first args) :encoding "ISO-8859-1")
+                content-filled-lines
+                ->days
+                (map summarize-day)
+                (map print-summary))))
