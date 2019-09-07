@@ -60,7 +60,7 @@
        (map clojure.string/trim)
        (filter (complement clojure.string/blank?))))
 
-(defn day-line? [l]
+(defn date [l]
   "Determine if l is a line of text containing information about a day"
   (let [words (time-calc.core/words l)]
     (if (= "#" (first words))
@@ -73,7 +73,7 @@
 (defn days [lines]
   "Convert a sequence of lines into a sequence of days"
   (->> lines
-       (partition-by day-line?)
+       (partition-by date)
        (partition-all 2)
        (map day)))
 

@@ -49,12 +49,12 @@
                                                                         "mensam glutitis"
                                                                         "mensam glutint"])))
 
-(deftest day-line?
+(deftest date
   (testing "Given happy path value, returns correct date"
-    (is ((complement nil?) (time-calc.core/day-line? "# 06-Jun"))))
+    (is ((complement nil?) (time-calc.core/date "# 06-Jun"))))
   (testing "Given invalid values, returns nil"
     (are [to-test]
-      (nil? (time-calc.core/day-line? to-test))
+      (nil? (time-calc.core/date to-test))
       "#01-Jan" ; No separator between date indicator and day of month
       "08-Aug"))) ; No date indicator
 
