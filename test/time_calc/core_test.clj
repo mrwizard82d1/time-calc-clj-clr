@@ -58,6 +58,26 @@
       "#01-Jan" ; No separator between date indicator and day of month
       "08-Aug"))) ; No date indicator
 
+(defn- current-year []
+  "Return the year of today"
+  (.Year (DateTime/Now)))
+
+(deftest day
+  (testing "Given a sequence of lines representing a day's activities, return the day (map)"
+    (are [to-test expected]
+      (= (time-calc.core/day to-test) expected)
+      [["# 23-Jan"] ["1259 intestinus"]] {:date (DateTime. (current-year) 1 23)
+                                          :activities ["1259 intestinus"]}
+      [["# 01-Jun"] ["0141 deportas" "1232 condigna"]] {:date (DateTime. (current-year) 6 1)
+                                                        :activities ["0141 deportas" "1232 condigna"]}))
+  (testing "Given an invalid day sequence, return nil"
+    (are [to-test]
+      (nil? (time-calc.core/day to-test))
+      []
+      [nil ["2306 frater"]]
+      [["# 02-Jan"]]
+      [["0451 caelum"]])))
+
 #_(deftest days
     (testing "Returns an empty sequence for an empty sequence."
       (is (empty? (time-calc.core/days []))))

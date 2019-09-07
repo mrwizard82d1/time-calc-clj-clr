@@ -66,9 +66,22 @@
     (if (= "#" (first words))
         (time-calc.core/day-of-year (second words)))))
 
+(defmacro when-let*
+  "Variant of when-let that requires multiple bindings.
+
+  Found in the v49 clojure cheat sheet https://clojure.org/api/cheatsheet."
+  ([bindings & body]
+   (if (seq bindings)
+     `(when-let [~(first bindings) ~(second bindings)]
+        (when-let* ~(drop 2 bindings) ~@body))
+     `(do ~@body))))
+
 (defn day [s]
   "Parses a sequence into information for a single day"
-  s)
+  (when-let* [candidate-date (date (ffirst s))
+              candidate-activities (second s)]
+    {:date candidate-date
+     :activities candidate-activities}))
 
 (defn days [lines]
   "Convert a sequence of lines into a sequence of days"
