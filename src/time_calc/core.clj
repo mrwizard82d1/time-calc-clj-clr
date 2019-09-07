@@ -1,5 +1,5 @@
 (ns time-calc.core
-  (:require clojure.string)
+  (:require clojure.string clojure.pprint)
   (:gen-class))
 
 (defn words
@@ -96,7 +96,7 @@
 
 (defn print-summary [summary]
   "Print a single day activity summary."
-  (println summary))
+  summary)
 
 (defn file-content
   "Read the complete contents of the specified file"
@@ -108,9 +108,9 @@
 (defn -main
   [& args]
   (apply println "Received args:" args)
-  (println (->> (first args)
-                file-content
-                content-filled-lines
-                days
-                (map summarize-day)
-                (map print-summary))))
+  (clojure.pprint/pprint (->> (first args)
+                              file-content
+                              content-filled-lines
+                              days
+                              (map summarize-day)
+                              (map print-summary))))
