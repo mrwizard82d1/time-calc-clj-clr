@@ -96,7 +96,7 @@
 
 (defn print-summary [summary]
   "Print a single day activity summary."
-  summary)
+  (clojure.pprint/pprint summary))
 
 (defn file-content
   "Read the complete contents of the specified file"
@@ -113,4 +113,5 @@
                               content-filled-lines
                               days
                               (map summarize-day)
-                              (map print-summary))))
+                              (map print-summary)
+                              (dorun))))
