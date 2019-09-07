@@ -30,6 +30,22 @@
       "# 08-Auf" ; Unrecognized month
       "# 31-Nov"))) ; No such date
 
+(deftest time-of-day
+  (testing "Given happy path values, return correct TimeSpan"
+    (are [to-test expected]
+      (= (time-calc.core/time-of-day to-test) expected)
+      "1727" (TimeSpan. 17 27 0)
+      "0343" (TimeSpan. 3 43 0)
+      "0105" (TimeSpan. 1 5 0)))
+  (testing "Given invalid values, return nil"
+    (are [to-test]
+      (nil? (time-calc.core/time-of-day to-test))
+      ""
+      "343"
+      "15"
+      "7")))
+
+
 (deftest content-filled-lines
   (testing "Returns an empty sequence for empty string"
     (are [string-to-test]

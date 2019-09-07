@@ -2,6 +2,16 @@
   (:require clojure.string clojure.pprint)
   (:gen-class))
 
+(defmacro when-let*
+  "Variant of when-let that requires multiple bindings.
+
+  Found in the v49 clojure cheat sheet https://clojure.org/api/cheatsheet."
+  ([bindings & body]
+   (if (seq bindings)
+     `(when-let [~(first bindings) ~(second bindings)]
+        (when-let* ~(drop 2 bindings) ~@body))
+     `(do ~@body))))
+
 (defn words
   "Split text into words (characters separated by whitespace)."
   [text]
@@ -45,10 +55,13 @@
 (defn time-of-day
   "Extract the time of day from `word`."
   [word]
-  (if-let [matches (re-matches #"([0-2][0-9])([0-5][0-9])" word)]
-    (let [candidate-hour (second matches)]
-      (if (< candidate-hour 24)
-        [candidate-hour (nth matches 2)]))))
+  (when-let* [matches (re-matches #"([0-2][0-9])([0-5][0-9])" word)
+              hour (second matches)
+              minute (nth matches 2)]
+             (let [typical-hour? (fn [h m] (and (< h 24) (<= m 59)))
+                   special-hour? (fn [h m] (and (= h 24) (= m 0)))]
+               (cond typical-hour? (TimeSpan. hour minute 0)
+                     special-hour? (TimeSpan. 1 24 0)))))
 
 (defn content-filled-lines [s]
   "Transform a string into a sequence of content filled lines.
@@ -66,22 +79,12 @@
     (if (= "#" (first words))
         (time-calc.core/day-of-year (second words)))))
 
-(defmacro when-let*
-  "Variant of when-let that requires multiple bindings.
-
-  Found in the v49 clojure cheat sheet https://clojure.org/api/cheatsheet."
-  ([bindings & body]
-   (if (seq bindings)
-     `(when-let [~(first bindings) ~(second bindings)]
-        (when-let* ~(drop 2 bindings) ~@body))
-     `(do ~@body))))
-
 (defn day [s]
   "Parses a sequence into information for a single day"
-  (when-let* [candidate-date (date (ffirst s))
-              candidate-activities (second s)]
-    {:date candidate-date
-     :activities candidate-activities}))
+  (when-let* [date (date (ffirst s))
+              activities (second s)]
+    {:date date
+     :activities activities}))
 
 (defn days [lines]
   "Convert a sequence of lines into a sequence of days"
