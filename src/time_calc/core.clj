@@ -40,7 +40,7 @@
     (if-let [day (day-number (second matches))]
       (if-let [month (month-number (nth matches 2))]
         (if-let [year (year-number (nth matches 4))]
-          [year month day])))))
+          (DateTime. year month day))))))
 
 (defn time-of-day
   "Extract the time of day from `word`."
@@ -60,9 +60,22 @@
        (map clojure.string/trim)
        (filter (complement clojure.string/blank?))))
 
-(defn ->days [lines]
+(defn day-line? [l]
+  "Determine if l is a line of text containing information about a day"
+  (let [words (time-calc.core/words l)]
+    (if (= "#" (first words))
+        (time-calc.core/day-of-year (second words)))))
+
+(defn day [s]
+  "Parses a sequence into information for a single day"
+  s)
+
+(defn days [lines]
   "Convert a sequence of lines into a sequence of days"
-  lines)
+  (->> lines
+       (partition-by day-line?)
+       (partition-all 2)
+       (map day)))
 
 (defn summarize-day [day]
   "Summarize the time spent on activities for a single day."
@@ -77,6 +90,6 @@
   (apply println "Received args:" args)
   (println (->> (slurp (first args) :encoding "ISO-8859-1")
                 content-filled-lines
-                ->days
+                days
                 (map summarize-day)
                 (map print-summary))))
