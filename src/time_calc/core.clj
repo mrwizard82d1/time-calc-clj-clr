@@ -98,10 +98,18 @@
   "Print a single day activity summary."
   (println summary))
 
+(defn file-content
+  "Read the complete contents of the specified file"
+  ([filename]
+   (file-content filename "ISO-8859-1"))
+  ([filename encoding]
+   (->> (slurp filename :encoding encoding))))
+
 (defn -main
   [& args]
   (apply println "Received args:" args)
-  (println (->> (slurp (first args) :encoding "ISO-8859-1")
+  (println (->> (first args)
+                file-content
                 content-filled-lines
                 days
                 (map summarize-day)
