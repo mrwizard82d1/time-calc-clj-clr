@@ -36,7 +36,8 @@
       (= (time-calc.core/time-of-day to-test) expected)
       "1727" (TimeSpan. 17 27 0)
       "0343" (TimeSpan. 3 43 0)
-      "0105" (TimeSpan. 1 5 0)))
+      "0105" (TimeSpan. 1 5 0)
+      "2400" (TimeSpan/FromDays 1)))
   (testing "Given invalid values, return nil"
     (are [to-test]
       (nil? (time-calc.core/time-of-day to-test))
@@ -94,10 +95,26 @@
       [["# 02-Jan"]]
       [["0451 caelum"]])))
 
-#_(deftest days
-    (testing "Returns an empty sequence for an empty sequence."
-      (is (empty? (time-calc.core/days []))))
-    (testing "Returns an single item sequence for a single day sequence."
-      (are [day-lines expected]
-        (= (time-calc.core/days day-lines) expected)
-        ["# 06-Jun" "0307 clamor"] [["# 06-Jun" "0307 clamor"]])))
+(defn- date-time [^DateTime date time-span]
+  (.Add date time-span))
+
+(deftest activity
+  (let [date (DateTime. 2015 8 8)]
+    (testing "Given a date and valid activity text, return the correct activity"
+      (are [to-test expected]
+        (= (time-calc.core/activity date to-test) expected)
+        "0720 email" {:start (date-time date (TimeSpan. 7 20 0))
+                      :details "email"}
+        "0800 plan day" {:start (date-time date (TimeSpan. 8 0 0))
+                         :details "plan day"}
+        "0855 work very hard" {:start (date-time date (TimeSpan. 8 55 0))
+                               :details "work very hard"}
+        "2400 out" {:start (date-time date (TimeSpan/FromDays 1))
+                    :details "out"}))
+    (testing "Given a date and invalid activity text, return nil"
+      (are [to-test]
+        (nil? (time-calc.core/activity date to-test))
+        "0720"
+        "720 email")))
+  (testing "Given an invalid date, return nil"
+    (is (nil? (time-calc.core/activity nil "0720 email")))))

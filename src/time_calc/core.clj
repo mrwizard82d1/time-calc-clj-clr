@@ -22,7 +22,7 @@
 (defn day-number
   "Extract the day of the month from day-text."
   [day-text]
-  (let [candidate-day (System.Int32/Parse day-text)]
+  (let [candidate-day (int day-text)]
     (if (<= candidate-day 31)
       candidate-day)))
 
@@ -39,7 +39,7 @@
   "Extract the year from the year-text."
   [year-text]
   (if (seq year-text)
-    (let [candidate-year (System.Int32/Parse year-text)]
+    (let [candidate-year (int year-text)]
       candidate-year)
     2019))
 
@@ -56,12 +56,12 @@
   "Extract the time of day from `word`."
   [word]
   (when-let* [matches (re-matches #"([0-2][0-9])([0-5][0-9])" word)
-              hour (second matches)
-              minute (nth matches 2)]
-             (let [typical-hour? (fn [h m] (and (< h 24) (<= m 59)))
-                   special-hour? (fn [h m] (and (= h 24) (= m 0)))]
-               (cond typical-hour? (TimeSpan. hour minute 0)
-                     special-hour? (TimeSpan. 1 24 0)))))
+              hour (int (second matches))
+              minute (int (nth matches 2))]
+             (let [typical? (fn [h m] (and (< h 24) (<= m 59)))
+                   special? (fn [h m] (and (= h 24) (= m 0)))]
+               (cond (typical? hour minute) (TimeSpan. hour minute 0)
+                     (special? hour minute) (TimeSpan/FromDays 1)))))
 
 (defn content-filled-lines [s]
   "Transform a string into a sequence of content filled lines.
@@ -92,6 +92,16 @@
        (partition-by date)
        (partition-all 2)
        (map day)))
+
+(defn activity [^DateTime date text]
+  "Transform date and text to an activity"
+  (if (not (nil? date))
+    (when-let* [words (words text)
+                time-of-day (time-of-day (first words))
+                detail-words (rest words)]
+               (when (seq detail-words)
+                 {:start (.Add date time-of-day)
+                  :details (apply str (interpose " " detail-words))}))))
 
 (defn summarize-day [day]
   "Summarize the time spent on activities for a single day."
