@@ -104,7 +104,7 @@
 
 (defn summarize-day [day]
   "Summarize the time spent on activities for a single day."
-  (activity (:date day) (:activities day)))
+  day)
 
 (defn print-summary [summary]
   "Print a single day activity summary."
@@ -117,13 +117,17 @@
   ([filename encoding]
    (->> (slurp filename :encoding encoding))))
 
+(defn summarize-activities-by-day [pathname]
+  "Summarize the daily activities in pathname"
+  (->> pathname
+       file-content
+       content-filled-lines
+       days
+       (map summarize-day)
+       (map print-summary)
+       (dorun)))
+
 (defn -main
   [& args]
   (apply println "Received args:" args)
-  (clojure.pprint/pprint (->> (first args)
-                              file-content
-                              content-filled-lines
-                              days
-                              (map summarize-day)
-                              (map print-summary)
-                              (dorun))))
+  (summarize-activities-by-day (first args)))
