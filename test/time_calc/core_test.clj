@@ -120,3 +120,11 @@
       [nil ["2306 frater"]]
       [["# 02-Jan"]]
       [["0451 caelum"]])))
+
+(deftest subtract-time-stamps
+  (testing "Verify the correct 'direction' of the subtraction"
+    (let [before (DateTime. 2017 1 4 4 47 32)
+          duration (TimeSpan. 1 52 0)
+          after (date-time before duration)]
+      (is (= (.Negate (TimeSpan. 1 52 0)) (time-calc.core/subtract-time-stamps before after)))
+      (is (= duration  (time-calc.core/subtract-time-stamps after before))))))

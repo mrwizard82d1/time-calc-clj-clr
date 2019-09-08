@@ -102,6 +102,10 @@
        (partition-all 2)
        (map day)))
 
+(defn subtract-time-stamps [^DateTime subtrahend ^DateTime minuend]
+  "Subtract DateTime, `minuend`, from DateTime, `subtrahend"
+  (.Subtract subtrahend minuend))
+
 (defn summarize-day [day]
   "Summarize the time spent on activities for a single day."
   day)
@@ -124,8 +128,8 @@
        content-filled-lines
        days
        (map summarize-day)
-       (map print-summary)
-       (dorun)))
+       #_(map print-summary)
+       #_(dorun)))
 
 (defn -main
   [& args]
