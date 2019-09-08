@@ -87,7 +87,7 @@
                 detail-words (rest words)]
                (when (seq detail-words)
                  {:start (.Add date time-of-day)
-                  :details (apply str (interpose " " detail-words))}))))
+                  :description (apply str (interpose " " detail-words))}))))
 
 (defn day [s]
   "Parses a sequence into information for a single day"

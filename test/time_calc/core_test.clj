@@ -84,13 +84,13 @@
       (are [to-test expected]
         (= (time-calc.core/activity date to-test) expected)
         "0720 email" {:start (date-time date (TimeSpan. 7 20 0))
-                      :details "email"}
+                      :description "email"}
         "0800 plan day" {:start (date-time date (TimeSpan. 8 0 0))
-                         :details "plan day"}
+                         :description "plan day"}
         "0855 work very hard" {:start (date-time date (TimeSpan. 8 55 0))
-                               :details "work very hard"}
+                               :description "work very hard"}
         "2400 out" {:start (date-time date (TimeSpan/FromDays 1))
-                    :details "out"}))
+                    :description "out"}))
     (testing "Given a date and invalid activity text, return nil"
       (are [to-test]
         (nil? (time-calc.core/activity date to-test))
@@ -108,11 +108,11 @@
     (are [to-test expected]
       (= (time-calc.core/day to-test) expected)
       [["# 23-Jan"] ["1259 intestinus"]] [{:start (DateTime. (current-year) 1 23 12 59 0)
-                                           :details "intestinus"}]
+                                           :description "intestinus"}]
       [["# 01-Jun"] ["0141 deportas" "1232 condigna"]] [{:start (DateTime. (current-year) 6 1 1 41 0)
-                                                         :details "deportas"}
+                                                         :description "deportas"}
                                                         {:start (DateTime. (current-year) 6 1 12 32 0)
-                                                         :details "condigna"}]))
+                                                         :description "condigna"}]))
   (testing "Given an invalid day sequence, return nil"
     (are [to-test]
       (nil? (time-calc.core/day to-test))
