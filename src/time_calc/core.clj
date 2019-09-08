@@ -127,11 +127,13 @@
        file-content
        content-filled-lines
        days
-       (map summarize-day)
-       #_(map print-summary)
-       #_(dorun)))
+       (map summarize-day)))
 
 (defn -main
   [& args]
   (apply println "Received args:" args)
-  (summarize-activities-by-day (first args)))
+  (->> args
+       first
+       summarize-activities-by-day
+       (map print-summary)
+       dorun))
