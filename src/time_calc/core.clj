@@ -79,20 +79,6 @@
     (if (= "#" (first words))
         (time-calc.core/day-of-year (second words)))))
 
-(defn day [s]
-  "Parses a sequence into information for a single day"
-  (when-let* [date (date (ffirst s))
-              activities (second s)]
-    {:date date
-     :activities activities}))
-
-(defn days [lines]
-  "Convert a sequence of lines into a sequence of days"
-  (->> lines
-       (partition-by date)
-       (partition-all 2)
-       (map day)))
-
 (defn activity [^DateTime date text]
   "Transform date and text to an activity"
   (if (not (nil? date))
@@ -103,9 +89,22 @@
                  {:start (.Add date time-of-day)
                   :details (apply str (interpose " " detail-words))}))))
 
+(defn day [s]
+  "Parses a sequence into information for a single day"
+  (when-let* [date (date (ffirst s))
+              activities (second s)]
+             (map (partial activity date) activities)))
+
+(defn days [lines]
+  "Convert a sequence of lines into a sequence of days"
+  (->> lines
+       (partition-by date)
+       (partition-all 2)
+       (map day)))
+
 (defn summarize-day [day]
   "Summarize the time spent on activities for a single day."
-  day)
+  (activity (:date day) (:activities day)))
 
 (defn print-summary [summary]
   "Print a single day activity summary."

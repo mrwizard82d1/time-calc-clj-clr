@@ -75,26 +75,6 @@
       "#01-Jan" ; No separator between date indicator and day of month
       "08-Aug"))) ; No date indicator
 
-(defn- current-year []
-  "Return the year of today"
-  (.Year (DateTime/Now)))
-
-(deftest day
-  (testing "Given a sequence of lines representing a day's activities, return the day (map)"
-    (are [to-test expected]
-      (= (time-calc.core/day to-test) expected)
-      [["# 23-Jan"] ["1259 intestinus"]] {:date (DateTime. (current-year) 1 23)
-                                          :activities ["1259 intestinus"]}
-      [["# 01-Jun"] ["0141 deportas" "1232 condigna"]] {:date (DateTime. (current-year) 6 1)
-                                                        :activities ["0141 deportas" "1232 condigna"]}))
-  (testing "Given an invalid day sequence, return nil"
-    (are [to-test]
-      (nil? (time-calc.core/day to-test))
-      []
-      [nil ["2306 frater"]]
-      [["# 02-Jan"]]
-      [["0451 caelum"]])))
-
 (defn- date-time [^DateTime date time-span]
   (.Add date time-span))
 
@@ -118,3 +98,25 @@
         "720 email")))
   (testing "Given an invalid date, return nil"
     (is (nil? (time-calc.core/activity nil "0720 email")))))
+
+(defn- current-year []
+  "Return the year of today"
+  (.Year (DateTime/Now)))
+
+(deftest day
+  (testing "Given a sequence of lines representing a day's activities, return the day (map)"
+    (are [to-test expected]
+      (= (time-calc.core/day to-test) expected)
+      [["# 23-Jan"] ["1259 intestinus"]] [{:start (DateTime. (current-year) 1 23 12 59 0)
+                                           :details "intestinus"}]
+      [["# 01-Jun"] ["0141 deportas" "1232 condigna"]] [{:start (DateTime. (current-year) 6 1 1 41 0)
+                                                         :details "deportas"}
+                                                        {:start (DateTime. (current-year) 6 1 12 32 0)
+                                                         :details "condigna"}]))
+  (testing "Given an invalid day sequence, return nil"
+    (are [to-test]
+      (nil? (time-calc.core/day to-test))
+      []
+      [nil ["2306 frater"]]
+      [["# 02-Jan"]]
+      [["0451 caelum"]])))
