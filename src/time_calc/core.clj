@@ -107,9 +107,16 @@
   "Subtract DateTime, `minuend`, from DateTime, `subtrahend"
   (.Subtract subtrahend minuend))
 
-(defn summarize-day [day]
+(defn add-durations [start-only-activities]
+  "Add implicit durations to the sequence of start-only-activities."
+  (let [starts (map :start start-only-activities)
+        implicit-ends (concat (drop 1 starts) [(last starts)])
+        durations (map #(subtract-time-stamps %2 %1) starts implicit-ends)]
+    (map assoc start-only-activities (repeat :duration) durations)))
+
+(defn summarize-day [activities]
   "Summarize the time spent on activities for a single day."
-  day)
+  activities)
 
 (defn print-summary [summary]
   "Print a single day activity summary."
@@ -128,6 +135,7 @@
        file-content
        content-filled-lines
        days
+       (map add-durations)
        (map summarize-day)))
 
 (defn -main
