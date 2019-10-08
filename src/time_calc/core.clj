@@ -130,9 +130,19 @@
   "Summarize the time spent on activities for a single day."
   (apply merge-with combine-same-description (map summarize-one-activity activities)))
 
-(defn print-summary [summary]
+(defn time-span-total-hours [^TimeSpan to-display]
+  "Convert a TimeSpan to total (decimal) hours"
+  (Math/Round (.TotalHours to-display) 2))
+
+(defn left-align-text [^String text size]
+  "Left-align text in a field of width size."
+  (.PadRight text size \space))
+
+(defn print-summary [one-day-summary]
   "Print a single day activity summary."
-  (clj-pprint/pprint summary))
+  (doseq [[description duration] one-day-summary]
+    (println (str (left-align-text description 16) (time-span-total-hours duration))))
+  (println))
 
 (defn file-content
   "Read the complete contents of the specified file"
