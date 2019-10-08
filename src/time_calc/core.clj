@@ -1,5 +1,6 @@
 (ns time-calc.core
-  (:require clojure.string clojure.pprint)
+  (:require [clojure.string :as clj-str]
+            [clojure.pprint :as clj-pprint])
   (:gen-class))
 
 (defmacro when-let*
@@ -16,7 +17,7 @@
   "Split text into words (characters separated by whitespace)."
   [text]
   (if (seq text)
-    (clojure.string/split text #"\s+")
+    (clj-str/split text #"\s+")
     nil))
 
 (defn day-number
@@ -69,9 +70,9 @@
   A content filled line is a line that is neither blank nor whitespace only.
   Additionally, each line has extraneous whitespace trimmed from the ends."
   (->> s
-       clojure.string/split-lines
-       (map clojure.string/trim)
-       (filter (complement clojure.string/blank?))))
+       clj-str/split-lines
+       (map clj-str/trim)
+       (filter (complement clj-str/blank?))))
 
 (defn date [l]
   "Determine if l is a line of text containing information about a day"
@@ -112,7 +113,7 @@
 
 (defn print-summary [summary]
   "Print a single day activity summary."
-  (clojure.pprint/pprint summary))
+  (clj-pprint/pprint summary))
 
 (defn file-content
   "Read the complete contents of the specified file"
