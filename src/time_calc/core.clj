@@ -114,9 +114,21 @@
         durations (map #(subtract-time-stamps %2 %1) starts implicit-ends)]
     (map assoc start-only-activities (repeat :duration) durations)))
 
+(defn add-time-spans [^TimeSpan left-addend ^TimeSpan right-addend]
+  "Add two TimeSpan's together."
+  (.Add left-addend right-addend))
+
+(defn summarize-one-activity [activity]
+  "Summarize a single activity."
+  {(:description activity) (:duration activity)})
+
+(defn combine-same-description [so-far new]
+  "Combine the durations of two activity summaries with the same description."
+  (add-time-spans so-far new))
+
 (defn summarize-day [activities]
   "Summarize the time spent on activities for a single day."
-  activities)
+  (apply merge-with combine-same-description (map summarize-one-activity activities)))
 
 (defn print-summary [summary]
   "Print a single day activity summary."
